@@ -1,0 +1,20 @@
+# An alternative dev configuration with the more simple devserver (easier to debug but you lose dev-prod parity)
+version: '3.7'
+
+services:
+  pg:
+    ports:
+      - '5432:5432'
+  web:
+    environment:
+      DJANGO_DB_MIGRATE: 'yes'
+    privileged: true
+    ports:
+      - '80:8000'
+    command: [
+      'django-admin',
+      'runserver',
+      '--insecure',
+      '0.0.0.0:8000'
+    ]
+    stop_signal: SIGINT

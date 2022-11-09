@@ -1,0 +1,96 @@
+- hosts: 127.0.0.1
+  connection: local
+  tags: build
+  tasks:
+    - name: start registry
+      docker_compose:
+        project_name: registry
+        remove_orphans: yes
+        definition:
+          version: '3.7'
+          services: >
+            {
+              "{{ compose_project_name }}": {
+                "image": "registry:2",
+                "ports": ["{{ registry_port }}:5000"],
+                "volumes": ["{{ playbook_dir }}/../.home/registry:/var/lib/registry"]
+              }
+            }
+    - name: build and publish image
+      command:
+        chdir: ..
+        cmd: docker-compose -f {{ inventory_dir }}/docker-compose.build.yml {{ item }}
+      environment:
+        app_version: '{{ app_version }}'
+        registry_host: '{{ registry_host }}'
+        compose_project_name: '{{ compose_project_name }}'
+      loop:
+        - build
+        - push
+- hosts: all
+  tasks:
+    - name: copy release docker-compose.yml
+      template:
+        src: '{{ inventory_dir }}/docker-compose.release.yml'
+        dest: '/services/{{ compose_file }}'
+    - name: get available compose files
+      find:
+        paths: /services
+        patterns: docker-compose*.yml
+      register: compose_files
+    - name: set default docker-compose.yml in environment
+      tags: env
+      lineinfile:
+        dest: /etc/environment
+        regexp: '^COMPOSE_FILE='
+        line: 'COMPOSE_FILE={{ compose_files.files | map(attribute="path") | join(":") }}'
+    - name: start/update services
+      tags: restart
+      docker_compose:
+        project_src: '/services'
+        files: '{{ compose_files.files | map(attribute="path") | list }}'
+    - name: ensure new users/databases
+      args:
+        executable: /bin/bash
+      shell: |
+        set -euxo pipefail
+        echo "
+        ####################################
+            $(date)
+        ####################################" >> /services/setup.log
+        docker-compose exec -T pg /docker-entrypoint-initdb.d/extra-users.sh
+    - name: run migrations
+      environment:
+        COMPOSE_FILE: '{{ compose_files.files | map(attribute="path") | join(":") }}'
+      args:
+        executable: /bin/bash
+      shell: |
+        set -euxo pipefail
+        echo "
+        ####################################
+            $(date)
+        ####################################" >> /services/{{ item }}/logs/migrations.log
+        docker-compose run --rm -T {{ item }} pysu app django-admin migrate --no-input 2>&1 | tee -a /services/{{ item }}/logs/migrations.log
+        docker-compose run --rm -T {{ item }} pysu app django-admin collectstatic --noinput --clear -v0
+      loop: '{{ services|list }}'
+      register: migration_result
+      failed_when:
+        - migration_result.rc != 0
+    - name: reload nginx
+      environment:
+        COMPOSE_FILE: '{{ compose_files.files | map(attribute="path") | join(":") }}'
+      command:
+        cmd: docker-compose kill -s HUP nginx
+- hosts: 127.0.0.1
+  connection: local
+  tags: build
+  tasks:
+    - name: shutdown registry
+      tags: cleanup
+      docker_compose:
+        project_name: registry
+        state: absent
+        remove_orphans: yes
+        definition:
+          version: '3.7'
+          services: '{"{{ compose_project_name }}": {"image": "registry:2"}}'

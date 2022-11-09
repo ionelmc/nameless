@@ -1,0 +1,9 @@
+.cache
+.pytest_cache
+**/*.pyc
+**/__pycache__
+static
+*.gz
+*.log
+*.dump
+*.csv

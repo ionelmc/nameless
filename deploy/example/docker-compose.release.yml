@@ -1,0 +1,93 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: {{ registry_host }}/{{ compose_project_name }}-nginx:{{ app_version }}
+    restart: always
+    ports: ['80:80', '443:443']
+    volumes:
+      - /services/nginx/etc:/etc/letsencrypt
+      - /services/nginx/logs:/var/log/letsencrypt
+      - /services/nginx/logs:/var/app/logs
+      - /services/demo/static:/shared/demo.example.com/static
+      - /services/demo/etc:/shared/demo.example.com/etc
+      - /services/demo/run:/shared/demo.example.com/run
+      - /services/demo/.well-known:/shared/demo.example.com/.well-known
+    command: [ 'nginx' ]
+  demo:
+    image: {{ registry_host }}/{{ compose_project_name }}-demo:{{ app_version }}
+    env_file:
+      - /services/demo/.env
+    restart: unless-stopped
+    volumes:
+      - /services/demo/static:/var/app/static
+      - /services/demo/logs:/var/app/logs
+      - /services/demo/run:/var/app/run
+      - /services/demo/etc:/etc/app
+    depends_on:
+      - pg
+      - mc
+      - redis
+    entrypoint: [ '/entrypoint.sh' ]
+    command: [ 'uwsgi', '--ini', '/etc/app/uwsgi.ini' ]
+  worker:
+    image: {{ registry_host }}/{{ compose_project_name }}-worker:{{ app_version }}
+    env_file:
+      - /services/worker/.env
+    restart: unless-stopped
+    volumes:
+      - /services/worker/static:/var/app/static
+      - /services/worker/logs:/var/app/logs
+      - /services/worker/run:/var/app/run
+      - /services/worker/etc:/etc/app
+    depends_on:
+      - pg
+      - mc
+      - redis
+    entrypoint: [ '/entrypoint.sh' ]
+    command: [ 'pysu', 'app', 'worker' ]
+  cron:
+    image: {{ registry_host }}/{{ compose_project_name }}-cron:{{ app_version }}
+    env_file:
+      - /services/cron/.env
+    restart: unless-stopped
+    volumes:
+      - /services/cron/static:/var/app/static
+      - /services/cron/logs:/var/app/logs
+      - /services/cron/run:/var/app/run
+      - /services/cron/etc:/etc/app
+    depends_on:
+      - pg
+      - mc
+      - redis
+    entrypoint: [ '/entrypoint.sh' ]
+    command: [ 'pysu', 'app', 'yacron', '--config=/etc/app/yacron.yml' ]
+  pg:
+    image: {{ registry_host }}/{{ compose_project_name }}-pg:{{ app_version }}
+    restart: unless-stopped
+    command: [
+      'postgres',
+      '-c', 'log_lock_waits=true',
+      '-c', 'log_min_error_statement=WARNING',
+      '-c', 'log_min_duration_statement=1s',
+      '-c', 'log_destination=stderr',
+      '-c', 'logging_collector=on',
+      '-c', 'log_directory=/var/log/postgresql',
+      '-c', 'log_filename=pg-%Y-%m-%d.log',
+      '-c', 'log_truncate_on_rotation=off',
+      '-c', 'log_rotation_age=1d',
+      '-c', 'log_rotation_size=0',
+    ]
+    shm_size: 256MB
+    volumes:
+      - /services/pg/data:/var/lib/postgresql/data
+      - /services/pg/logs:/var/log/postgresql
+    environment:
+      PGUSER: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_EXTRAS:
+  mc:
+    image: memcached:1
+  redis:
+    image: redis:7

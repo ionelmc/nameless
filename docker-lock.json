@@ -1,0 +1,88 @@
+{
+	"composefiles": {
+		"docker-compose.yml": [
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04-scm",
+				"digest": "2a05306bdeb0a9f2778252159e95a18648af6200e3d7d0bd4aaec77e74147c61",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "cron"
+			},
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04",
+				"digest": "ec9096bf95187882f05a1ae0da3fd1f0d0dbac1cdc6d67cd5c3a06c52f99c19d",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "cron"
+			},
+			{
+				"name": "ubuntu",
+				"tag": "22.04",
+				"digest": "4b1d0c4a2d2aaf63b37111f34eb9fa89fa1bf53dd6e4ca954d47caebca4005c2",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "cron"
+			},
+			{
+				"name": "memcached",
+				"tag": "1",
+				"digest": "1c1de15596b046d3127962c21457a0f791b448149890df667713cbd58e6ff8d9",
+				"service": "mc"
+			},
+			{
+				"name": "postgres",
+				"tag": "15",
+				"digest": "bab8d7be6466e029f7fa1e69ff6aa0082704db330572638fd01f2791824774d8",
+				"dockerfile": "docker/postgres/Dockerfile",
+				"service": "pg"
+			},
+			{
+				"name": "redis",
+				"tag": "7",
+				"digest": "aeed51f49a6331df0cb2c1039ae3d1d70d882be3f48bde75cd240452a2348e88",
+				"service": "redis"
+			},
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04-scm",
+				"digest": "2a05306bdeb0a9f2778252159e95a18648af6200e3d7d0bd4aaec77e74147c61",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "web"
+			},
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04",
+				"digest": "ec9096bf95187882f05a1ae0da3fd1f0d0dbac1cdc6d67cd5c3a06c52f99c19d",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "web"
+			},
+			{
+				"name": "ubuntu",
+				"tag": "22.04",
+				"digest": "4b1d0c4a2d2aaf63b37111f34eb9fa89fa1bf53dd6e4ca954d47caebca4005c2",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "web"
+			},
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04-scm",
+				"digest": "2a05306bdeb0a9f2778252159e95a18648af6200e3d7d0bd4aaec77e74147c61",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "worker"
+			},
+			{
+				"name": "buildpack-deps",
+				"tag": "22.04",
+				"digest": "ec9096bf95187882f05a1ae0da3fd1f0d0dbac1cdc6d67cd5c3a06c52f99c19d",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "worker"
+			},
+			{
+				"name": "ubuntu",
+				"tag": "22.04",
+				"digest": "4b1d0c4a2d2aaf63b37111f34eb9fa89fa1bf53dd6e4ca954d47caebca4005c2",
+				"dockerfile": "docker/python/Dockerfile",
+				"service": "worker"
+			}
+		]
+	}
+}

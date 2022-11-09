@@ -1,0 +1,20 @@
+defaults:
+  onFailure:
+    report:
+      sentry:
+        dsn:
+          fromEnvVar: SENTRY_DSN
+        fingerprint:  # optional, since yacron 0.6
+          - '{{ name }}'
+  utc: false
+  captureStdout: true
+  captureStderr: true
+  concurrencyPolicy: Forbid
+  failsWhen:
+    producesStdout: false
+    producesStderr: false
+jobs:
+  - name: stuff
+    schedule:
+      minute: '*/5'
+    command: django-admin stuff

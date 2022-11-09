@@ -1,0 +1,55 @@
+- hosts: all
+  tasks:
+    - name: deploy hook
+      copy:
+        dest: /services/nginx/etc/renewal-hooks/deploy/run
+        mode: 0777
+        content: |
+          #!/bin/bash
+          set -euxo pipefail
+          cp $RENEWED_LINEAGE/*.pem /shared/$RENEWED_DOMAINS/etc/
+          ps fauxww
+          kill -HUP 1
+    - name: fix cron PATH
+      cron:
+        env: true
+        name: PATH
+        job: '{{ ansible_env.PATH }}'
+    - name: install renewal cron job
+      cron:
+        name: certbot_renew
+        minute: '0'
+        hour: '1'
+        job: docker-compose exec -T nginx certbot renew >> /services/nginx/logs/cron.log 2>&1
+    - name: initial setup
+      args:
+        executable: /bin/bash
+      shell: |
+        set -euxo pipefail
+        echo "
+        ####################################
+            $(date)
+        ####################################" >> /services/nginx/logs/setup.log
+        docker-compose run --rm -T nginx certbot certonly \
+          --webroot \
+          --agree-tos \
+          --preferred-challenges=http-01 \
+          --email={{ letsencrypt_email }} \
+          --webroot-path=/shared/{{ item }} \
+          --domain={{ item }} \
+          --non-interactive \
+          --keep-until-expiring 2>&1 | tee -a /services/nginx/logs/setup.log
+      loop: '{{ letsencrypt_domains|list }}'
+    - name: manually copy certs
+      args:
+        executable: /bin/bash
+      shell: |
+        set -euxo pipefail
+        docker-compose run --rm -T \
+          -e 'RENEWED_LINEAGE=/etc/letsencrypt/live/{{ item }}' \
+          -e 'RENEWED_DOMAINS={{ item }}' \
+          nginx /etc/letsencrypt/renewal-hooks/deploy/run >> /services/nginx/logs/setup.log
+      loop: '{{ letsencrypt_domains|list }}'
+    - name: reload nginx
+      command:
+        cmd: docker-compose kill -s HUP nginx

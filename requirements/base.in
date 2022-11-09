@@ -1,0 +1,52 @@
+django
+
+# bare minimum stuff
+attrs
+django-admin-utils
+django-crispy-forms
+django-pylibmc
+django-settings-export
+lazy_object_proxy
+python-dateutil
+requests
+sentry-sdk
+tzdata
+
+# connectors
+--no-binary=psycopg2
+psycopg2
+pylibmc
+
+# container tooling
+holdup
+pysu
+
+# django specific debug tooling
+django-debug-toolbar
+django-extensions
+django-rosetta
+
+# for sql logging
+sqlparse
+colorama
+
+# generic debugging
+remote-pdb
+aspectlib
+hunter
+
+# ipdb
+ipdb
+ipython
+jedi
+prompt_toolkit
+
+# cron
+yacron
+ruamel.yaml
+# rq worker
+rq
+django-rq
+
+uwsgi
+django-uwsgi
