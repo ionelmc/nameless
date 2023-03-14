@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 
 from . import env
 
-PROJECT_VERSION = "0.1.0"
+PROJECT_VERSION = "0.1.1"
 
 # This is the nameless_project directory
 BASE_DIR = Path(__file__).resolve().parent

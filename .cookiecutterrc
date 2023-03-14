@@ -20,7 +20,7 @@ default_context:
     pip_version: 23.0.1
     postgresql_version: '15'
     pre_commit_formatter: black
-    project_version: 0.1.0
+    project_version: 0.1.1
     redis_version: '7'
     repo_name: nameless
     sentry_dsn: https://XXX@YYY.ingest.sentry.io/ZZZ
