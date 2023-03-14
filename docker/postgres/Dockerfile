@@ -1,4 +1,4 @@
-FROM postgres:15@sha256:bab8d7be6466e029f7fa1e69ff6aa0082704db330572638fd01f2791824774d8
+FROM postgres:15@sha256:50a96a21f2992518c2cb4601467cf27c7ac852542d8913c1872fe45cd6449947
 
 RUN groupmod --gid=1000 postgres \
  && usermod --uid=1000 postgres

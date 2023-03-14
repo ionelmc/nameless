@@ -2,4 +2,5 @@ from django.db import models
 
 
 class Stuff(models.Model):
-    pass
+    def __str__(self):
+        return f"Stuff(pk={self.pk})"

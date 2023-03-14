@@ -49,4 +49,5 @@ rq
 django-rq
 
 uwsgi
-django-uwsgi
+uwsgitop
+django-uwsgi-admin

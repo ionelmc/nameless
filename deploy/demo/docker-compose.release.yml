@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   nginx:
@@ -30,38 +30,38 @@ services:
       - redis
     entrypoint: [ '/entrypoint.sh' ]
     command: [ 'uwsgi', '--ini', '/etc/app/uwsgi.ini' ]
-  worker:
-    image: {{ registry_host }}/{{ compose_project_name }}-worker:{{ app_version }}
+  demo_worker:
+    image: {{ registry_host }}/{{ compose_project_name }}-demo_worker:{{ app_version }}
     env_file:
-      - /services/worker/.env
+      - /services/demo_worker/.env
     restart: unless-stopped
     volumes:
-      - /services/worker/static:/var/app/static
-      - /services/worker/logs:/var/app/logs
-      - /services/worker/run:/var/app/run
-      - /services/worker/etc:/etc/app
+      - /services/demo_worker/static:/var/app/static
+      - /services/demo_worker/logs:/var/app/logs
+      - /services/demo_worker/run:/var/app/run
+      - /services/demo_worker/etc:/etc/app
     depends_on:
       - pg
       - mc
       - redis
     entrypoint: [ '/entrypoint.sh' ]
-    command: [ 'pysu', 'app', 'worker' ]
-  cron:
-    image: {{ registry_host }}/{{ compose_project_name }}-cron:{{ app_version }}
+    command: [ 'pysu', 'app', '--', 'demo_worker' ]
+  demo_cron:
+    image: {{ registry_host }}/{{ compose_project_name }}-demo_cron:{{ app_version }}
     env_file:
-      - /services/cron/.env
+      - /services/demo_cron/.env
     restart: unless-stopped
     volumes:
-      - /services/cron/static:/var/app/static
-      - /services/cron/logs:/var/app/logs
-      - /services/cron/run:/var/app/run
-      - /services/cron/etc:/etc/app
+      - /services/demo_cron/static:/var/app/static
+      - /services/demo_cron/logs:/var/app/logs
+      - /services/demo_cron/run:/var/app/run
+      - /services/demo_cron/etc:/etc/app
     depends_on:
       - pg
       - mc
       - redis
     entrypoint: [ '/entrypoint.sh' ]
-    command: [ 'pysu', 'app', 'yacron', '--config=/etc/app/yacron.yml' ]
+    command: [ 'pysu', 'app', '--', 'demo_cron' ]
   pg:
     image: {{ registry_host }}/{{ compose_project_name }}-pg:{{ app_version }}
     restart: unless-stopped

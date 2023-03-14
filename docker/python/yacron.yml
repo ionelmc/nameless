@@ -14,7 +14,7 @@ defaults:
     producesStdout: false
     producesStderr: false
 jobs:
-  - name: stuff
+  - name: check_stuff
     schedule:
       minute: '*/5'
-    command: django-admin stuff
+    command: django-admin check_stuff

@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   nginx:
@@ -21,8 +21,8 @@ services:
         USER_ID: 2001
         GROUP_ID: 2001
         SERVER_NAME: demo.example.com
-  worker:
-    image: ${registry_host}/${compose_project_name}-worker:${app_version}
+  demo_worker:
+    image: ${registry_host}/${compose_project_name}-demo_worker:${app_version}
     build:
       context: ../..
       dockerfile: docker/python/Dockerfile
@@ -31,8 +31,8 @@ services:
         DJANGO_SETTINGS_MODULE: ${django_settings_module}
         USER_ID: 2002
         GROUP_ID: 2002
-  cron:
-    image: ${registry_host}/${compose_project_name}-cron:${app_version}
+  demo_cron:
+    image: ${registry_host}/${compose_project_name}-demo_cron:${app_version}
     build:
       context: ../..
       dockerfile: docker/python/Dockerfile

@@ -19,11 +19,12 @@
     - name: build and publish image
       command:
         chdir: ..
-        cmd: docker-compose -f {{ inventory_dir }}/docker-compose.build.yml {{ item }}
+        cmd: docker compose -f {{ inventory_dir }}/docker-compose.build.yml {{ item }}
       environment:
         app_version: '{{ app_version }}'
         registry_host: '{{ registry_host }}'
         compose_project_name: '{{ compose_project_name }}'
+        django_settings_module: '{{ django_settings_module }}'
       loop:
         - build
         - push
@@ -50,6 +51,7 @@
         project_src: '/services'
         files: '{{ compose_files.files | map(attribute="path") | list }}'
     - name: ensure new users/databases
+      when: database_name is defined
       args:
         executable: /bin/bash
       shell: |
@@ -58,7 +60,7 @@
         ####################################
             $(date)
         ####################################" >> /services/setup.log
-        docker-compose exec -T pg /docker-entrypoint-initdb.d/extra-users.sh
+        docker compose exec -T -e POSTGRES_EXTRAS={{ database_name }} pg /docker-entrypoint-initdb.d/extra-users.sh
     - name: run migrations
       environment:
         COMPOSE_FILE: '{{ compose_files.files | map(attribute="path") | join(":") }}'
@@ -70,8 +72,8 @@
         ####################################
             $(date)
         ####################################" >> /services/{{ item }}/logs/migrations.log
-        docker-compose run --rm -T {{ item }} pysu app django-admin migrate --no-input 2>&1 | tee -a /services/{{ item }}/logs/migrations.log
-        docker-compose run --rm -T {{ item }} pysu app django-admin collectstatic --noinput --clear -v0
+        docker compose run --rm -T {{ item }} pysu app django-admin migrate --no-input 2>&1 | tee -a /services/{{ item }}/logs/migrations.log
+        docker compose run --rm -T {{ item }} pysu app django-admin collectstatic --noinput --clear -v0
       loop: '{{ services|list }}'
       register: migration_result
       failed_when:
@@ -80,7 +82,7 @@
       environment:
         COMPOSE_FILE: '{{ compose_files.files | map(attribute="path") | join(":") }}'
       command:
-        cmd: docker-compose kill -s HUP nginx
+        cmd: docker compose kill -s HUP nginx
 - hosts: 127.0.0.1
   connection: local
   tags: build
