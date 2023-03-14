@@ -58,23 +58,6 @@
         dest: /etc/environment
         regexp: '^COMPOSE_FILE='
         line: 'COMPOSE_FILE={{ compose_files|quote }}'
-    - name: restart services
-      tags: [restart, never]
-      shell:
-        executable: /bin/bash
-        cmd: |
-          exec > >(tee -a /services/deploy.log) 2>&1
-          set -euxo pipefail
-          docker compose restart {{ item }}
-      loop: '{{ services|list }}'
-    - name: start/update services
-      tags: [restart]
-      shell:
-        executable: /bin/bash
-        cmd: |
-          exec > >(tee -a /services/deploy.log) 2>&1
-          set -euxo pipefail
-          docker compose up --detach --quiet-pull --no-color --no-recreate
     - name: ensure new users/databases
       when: database_name is defined
       shell:
@@ -99,6 +82,23 @@
           docker compose run --rm --no-TTY {{ item.key }} pysu app django-admin collectstatic --noinput --clear -v0
       loop: '{{ services|dict2items }}'
       when: item.value
+    - name: restart services
+      tags: [restart, never]
+      shell:
+        executable: /bin/bash
+        cmd: |
+          exec > >(tee -a /services/deploy.log) 2>&1
+          set -euxo pipefail
+          docker compose restart {{ item }}
+      loop: '{{ services|list }}'
+    - name: start/update services
+      tags: [restart]
+      shell:
+        executable: /bin/bash
+        cmd: |
+          exec > >(tee -a /services/deploy.log) 2>&1
+          set -euxo pipefail
+          docker compose up --detach --quiet-pull --no-color
     - name: reload nginx
       shell:
         executable: /bin/bash

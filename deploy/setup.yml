@@ -135,4 +135,4 @@
         cmd: |
           exec > >(tee -a /services/deploy.log) 2>&1
           set -euxo pipefail
-          docker compose up --detach --quiet-pull --no-color --no-recreate
+          docker compose up --detach --quiet-pull --no-color
