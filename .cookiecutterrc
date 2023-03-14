@@ -16,15 +16,15 @@ default_context:
     dockerfile_version: '1'
     memcached_version: '1'
     name: Nameless
-    pip_tools_version: 6.12.2
+    pip_tools_version: 6.12.3
     pip_version: 23.0.1
     postgresql_version: '15'
     pre_commit_formatter: black
     project_version: 0.1.2
     redis_version: '7'
     repo_name: nameless
-    sentry_dsn: https://XXX@YYY.ingest.sentry.io/ZZZ
-    setuptools_version: 67.3.3
+    sentry_dsn: ''
+    setuptools_version: 67.6.0
     short_description: An example project. Generated with ionelmc/cookiecutter-django-docker.
     timezone: Europe/Bucharest
     ubuntu_release: jammy

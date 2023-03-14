@@ -19,7 +19,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main 15" > /etc
         build-essential git sudo ca-certificates
 
 RUN bash -o pipefail -c "curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | \
-    python - --no-cache --disable-pip-version-check --upgrade pip==23.0.1 setuptools==67.3.3"
+    python - --no-cache --disable-pip-version-check --upgrade pip==23.0.1 setuptools==67.6.0"
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
 COPY requirements/*.txt /requirements/
@@ -75,7 +75,7 @@ RUN apt-get update \
 
 
 RUN bash -o pipefail -c "curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | \
-    python - --no-cache --disable-pip-version-check --upgrade pip==23.0.1 setuptools==67.3.3"
+    python - --no-cache --disable-pip-version-check --upgrade pip==23.0.1 setuptools==67.6.0"
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps set -x \
  && if [ -e /deps/wheels ] \
