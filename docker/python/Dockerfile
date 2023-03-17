@@ -1,7 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM buildpack-deps:22.04-scm@sha256:309fa57d4ff4c368763213a7e066d1b87cc15fe0949c124f3a7ed8430c4bcd1c as deps
-
-ARG TZ=UTC
+FROM buildpack-deps:22.04-scm@sha256:79b0f9319ebb640493eaf8539641f9fc67a08f10ec5fc2f8a7d9a447fd786055 as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -36,7 +34,7 @@ RUN --mount=type=cache,target=/root/.cache set -x \
 
 ##################################
 ##################################
-FROM buildpack-deps:22.04@sha256:9a5858bbf22b934014c6d0cacb9e2e8281868a5315445da65574541a919dba32 as certs
+FROM buildpack-deps:22.04@sha256:fe20c1a1fa7749ce93af04e56c2a46297e6b236eeddbdb8fd780ec58784c121a as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -46,12 +44,10 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:22.04@sha256:2adf22367284330af9f832ffefb717c78239f6251d9d0f58de50b86229ed1427
+FROM ubuntu:22.04@sha256:67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
-ARG TZ=Europe/Bucharest
-ENV TZ=$TZ
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl software-properties-common gpg-agent \
@@ -59,6 +55,7 @@ RUN apt-get update \
  && curl -fsSL11 'https://www.postgresql.org/media/keys/ACCC4CF8.asc' | apt-key add - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        tzdata \
         strace ltrace gdb lsof locate net-tools htop iputils-ping dnsutils \
         nano vim tree less telnet \
         socat byobu \
@@ -72,7 +69,10 @@ RUN apt-get update \
         nginx \
         gdal-bin python3-gdal
 
-
+ARG TZ=Europe/Bucharest
+ENV TZ=$TZ
+RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
+ && dpkg-reconfigure -f noninteractive tzdata
 
 RUN bash -o pipefail -c "curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | \
     python - --no-cache --disable-pip-version-check --upgrade pip==23.0.1 setuptools==67.6.0"

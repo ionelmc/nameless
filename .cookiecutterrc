@@ -14,12 +14,12 @@ default_context:
     django_project_name: nameless_project
     docker_compose_version: '3.8'
     dockerfile_version: '1'
+    formatter_quote_style: double
     memcached_version: '1'
     name: Nameless
     pip_tools_version: 6.12.3
     pip_version: 23.0.1
     postgresql_version: '15'
-    pre_commit_formatter: black
     project_version: 0.1.3
     redis_version: '7'
     repo_name: nameless
