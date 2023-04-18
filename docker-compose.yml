@@ -47,10 +47,10 @@ services:
       - ./.home:/root
 
   mc:
-    image: memcached:1@sha256:fc997e6877268f7aa27aa96f1e99ea76b20304127aabab4fec4b4936af49ec03
+    image: memcached:1@sha256:3b793890596173d412c8b4ab70f5206a2143e74222ded6a61768edca87b6d529
 
   redis:
-    image: redis:7@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0
+    image: redis:7@sha256:f50031a49f41e493087fb95f96fdb3523bb25dcf6a3f0b07c588ad3cdbe1d0aa
 
   cron:
     <<: *python

@@ -25,20 +25,20 @@
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "fc997e6877268f7aa27aa96f1e99ea76b20304127aabab4fec4b4936af49ec03",
+				"digest": "3b793890596173d412c8b4ab70f5206a2143e74222ded6a61768edca87b6d529",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
 				"tag": "15",
-				"digest": "50a96a21f2992518c2cb4601467cf27c7ac852542d8913c1872fe45cd6449947",
+				"digest": "6cc97262444f1c45171081bc5a1d4c28b883ea46a6e0d1a45a8eac4a7f4767ab",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
 			{
 				"name": "redis",
 				"tag": "7",
-				"digest": "e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
+				"digest": "f50031a49f41e493087fb95f96fdb3523bb25dcf6a3f0b07c588ad3cdbe1d0aa",
 				"service": "redis"
 			},
 			{
