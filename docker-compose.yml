@@ -21,12 +21,17 @@ x-python:
   env_file:
     - .env
   tty: false
+  deploy:
+    resources:
+      limits:
+        memory: ${MEMORY_LIMIT:-4G}
   volumes:
     - .:/app
     - ./.home:/root
     - ./.home:/home/app
     - ./.home:/var/app
     - ./.home/etc:/etc/app
+    - ./.home/logs:/app/logs
 services:
   pg:
     build:
@@ -47,10 +52,10 @@ services:
       - ./.home:/root
 
   mc:
-    image: memcached:1@sha256:3b793890596173d412c8b4ab70f5206a2143e74222ded6a61768edca87b6d529
+    image: memcached:1@sha256:c4629131de471fcb0d7a054ca1f409c03d9be50a1678501bfdb04f492fe20e62
 
   redis:
-    image: redis:7@sha256:f50031a49f41e493087fb95f96fdb3523bb25dcf6a3f0b07c588ad3cdbe1d0aa
+    image: redis:7@sha256:ea30bef6a1424d032295b90db20a869fc8db76331091543b7a80175cede7d887
 
   cron:
     <<: *python

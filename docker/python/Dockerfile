@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
-FROM buildpack-deps:22.04-scm@sha256:79b0f9319ebb640493eaf8539641f9fc67a08f10ec5fc2f8a7d9a447fd786055 as deps
+FROM buildpack-deps:22.04-scm@sha256:85a724d0c2d43aedabd8a30ed5aaf8dfc783166a56dc879f7a0f892b65260e06 as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main 15" > /etc/apt/sources.list.d/pgdg.list \
- && curl -fsSL11 'https://www.postgresql.org/media/keys/ACCC4CF8.asc' | apt-key add - \
+ && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         python3-dev python3-distutils-extra \
@@ -26,7 +26,7 @@ ARG CPUCOUNT=1
 RUN --mount=type=cache,target=/root/.cache set -x \
  && mkdir /deps \
  && if [ -n "$REQUIREMENTS" ] \
-  ; then python -mpip wheel --wheel-dir=/deps/wheels -r requirements/$REQUIREMENTS.txt \
+  ; then python -mpip wheel --no-deps --require-hashes --wheel-dir=/deps/wheels --requirement=requirements/$REQUIREMENTS.txt \
  && ls -al /deps/wheels \
   ; else echo 'No REQUIREMENTS defined!' \
   ; fi
@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/root/.cache set -x \
 
 ##################################
 ##################################
-FROM buildpack-deps:22.04@sha256:fe20c1a1fa7749ce93af04e56c2a46297e6b236eeddbdb8fd780ec58784c121a as certs
+FROM buildpack-deps:22.04@sha256:7ecd6942c89d480af224b1b79d28a352884c61d9d8a566eb96fd06f29537afeb as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -44,7 +44,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:22.04@sha256:67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21
+FROM ubuntu:22.04@sha256:dfd64a3b4296d8c9b62aa3309984f8620b98d87e47492599ee20739e8eb54fbf
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -52,24 +52,31 @@ RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         curl software-properties-common gpg-agent \
  && echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main 15" > /etc/apt/sources.list.d/pgdg.list \
- && curl -fsSL11 'https://www.postgresql.org/media/keys/ACCC4CF8.asc' | apt-key add - \
+ && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        tzdata \
         strace ltrace gdb lsof locate net-tools htop iputils-ping dnsutils \
-        nano vim tree less telnet \
-        socat byobu \
+        nano vim tree less telnet socat byobu \
+        rsync moreutils \
         graphviz \
         dumb-init \
         libpq5=15.* postgresql-client-15 \
         python3-dbg python3-distutils python3-distutils-extra \
+        python3-gdal gdal-bin \
         python-is-python3 \
         libmemcached11 libpcre3 \
         sudo ca-certificates \
         nginx \
-        gdal-bin python3-gdal
+        rsync \
+        tzdata
 
 ARG TZ=Europe/Bucharest
+
+# Force a sensible default encoding (affects terminal output and filename handling).
+# See: https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/uwsgi/
+# Note that for en_US.UTF-8 you need to install and compile locales, seems overkill...
+ENV LANG=C.UTF-8
+
 ENV TZ=$TZ
 RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
@@ -91,7 +98,7 @@ RUN groupadd --gid $GROUP_ID app \
  && useradd --uid $USER_ID --gid $GROUP_ID --shell /bin/bash --create-home app \
  && echo "app ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 
-RUN mkdir -p /app /var/app/logs /var/app/static /var/app/run /etc/app \
+RUN mkdir -p /app /var/app/logs /var/app/static /var/app/run /etc/app /etc/app-defaults /etc/app-latest \
  && chown -R app:app /app /var/app/logs /var/app/run
 
 ENV PYTHONPATH=/app/src
@@ -107,28 +114,27 @@ ENV PYTHONFAULTHANDLER=x
 
 ARG DJANGO_SETTINGS_MODULE
 ENV DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+
 ARG DJANGO_SECRET_KEY="n/a"
 ARG SERVER_NAME="localhost"
 
 WORKDIR /app
 
 COPY docker/python/entrypoint.sh /
-COPY docker/python/uwsgi.ini /etc/app/
-COPY docker/python/worker.ini /etc/app/
-COPY docker/python/nginx.conf /etc/app/
-COPY docker/python/nginx.site /tmp/
-COPY docker/python/yacron.yml /etc/app/
-COPY --from=certs /certs/* /etc/app
+COPY docker/python/uwsgi.ini /etc/app-latest
+COPY docker/python/worker.ini /etc/app-latest
+COPY docker/python/nginx.conf /etc/app-latest
+COPY docker/python/nginx.site /etc/app-latest
+COPY docker/python/yacron.yml /etc/app-latest
 
-ADD https://ssl-config.mozilla.org/ffdhe2048.txt /etc/app/dhparam
+COPY --from=certs /certs/* /etc/app-defaults
 
 ARG SERVER_NAME="localhost"
-RUN envsubst \$SERVER_NAME < /tmp/nginx.site > /etc/app/nginx.site
-RUN cp /etc/app/fullchain.pem /etc/app/chain.pem \
+RUN envsubst \$SERVER_NAME < /etc/app-latest/nginx.site | sponge /etc/app-latest/nginx.site
+RUN cp /etc/app-defaults/fullchain.pem /etc/app-defaults/chain.pem \
  && ln -sf /etc/app/nginx.conf /etc/nginx/nginx.conf \
- && cp /etc/nginx/mime.types /etc/app \
- && chmod -R go+r /etc/app \
- && cp -r /etc/app /etc/app-defaults
+ && cp /etc/nginx/mime.types /etc/app-latest \
+ && chmod -R go+r /etc/app
 
 ARG DJANGO_COLLECTSTATIC
 RUN set -x \

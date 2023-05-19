@@ -4,82 +4,82 @@
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04-scm",
-				"digest": "79b0f9319ebb640493eaf8539641f9fc67a08f10ec5fc2f8a7d9a447fd786055",
+				"digest": "85a724d0c2d43aedabd8a30ed5aaf8dfc783166a56dc879f7a0f892b65260e06",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "cron"
 			},
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04",
-				"digest": "fe20c1a1fa7749ce93af04e56c2a46297e6b236eeddbdb8fd780ec58784c121a",
+				"digest": "7ecd6942c89d480af224b1b79d28a352884c61d9d8a566eb96fd06f29537afeb",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "cron"
 			},
 			{
 				"name": "ubuntu",
 				"tag": "22.04",
-				"digest": "67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21",
+				"digest": "dfd64a3b4296d8c9b62aa3309984f8620b98d87e47492599ee20739e8eb54fbf",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "cron"
 			},
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "3b793890596173d412c8b4ab70f5206a2143e74222ded6a61768edca87b6d529",
+				"digest": "c4629131de471fcb0d7a054ca1f409c03d9be50a1678501bfdb04f492fe20e62",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
 				"tag": "15",
-				"digest": "6cc97262444f1c45171081bc5a1d4c28b883ea46a6e0d1a45a8eac4a7f4767ab",
+				"digest": "8d45935fb783e72c871072e9eb72ee8c817a9eaf25c405b0e62526b14191368d",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
 			{
 				"name": "redis",
 				"tag": "7",
-				"digest": "f50031a49f41e493087fb95f96fdb3523bb25dcf6a3f0b07c588ad3cdbe1d0aa",
+				"digest": "ea30bef6a1424d032295b90db20a869fc8db76331091543b7a80175cede7d887",
 				"service": "redis"
 			},
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04-scm",
-				"digest": "79b0f9319ebb640493eaf8539641f9fc67a08f10ec5fc2f8a7d9a447fd786055",
+				"digest": "85a724d0c2d43aedabd8a30ed5aaf8dfc783166a56dc879f7a0f892b65260e06",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "web"
 			},
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04",
-				"digest": "fe20c1a1fa7749ce93af04e56c2a46297e6b236eeddbdb8fd780ec58784c121a",
+				"digest": "7ecd6942c89d480af224b1b79d28a352884c61d9d8a566eb96fd06f29537afeb",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "web"
 			},
 			{
 				"name": "ubuntu",
 				"tag": "22.04",
-				"digest": "67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21",
+				"digest": "dfd64a3b4296d8c9b62aa3309984f8620b98d87e47492599ee20739e8eb54fbf",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "web"
 			},
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04-scm",
-				"digest": "79b0f9319ebb640493eaf8539641f9fc67a08f10ec5fc2f8a7d9a447fd786055",
+				"digest": "85a724d0c2d43aedabd8a30ed5aaf8dfc783166a56dc879f7a0f892b65260e06",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "buildpack-deps",
 				"tag": "22.04",
-				"digest": "fe20c1a1fa7749ce93af04e56c2a46297e6b236eeddbdb8fd780ec58784c121a",
+				"digest": "7ecd6942c89d480af224b1b79d28a352884c61d9d8a566eb96fd06f29537afeb",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "ubuntu",
 				"tag": "22.04",
-				"digest": "67211c14fa74f070d27cc59d69a7fa9aeff8e28ea118ef3babc295a0428a6d21",
+				"digest": "dfd64a3b4296d8c9b62aa3309984f8620b98d87e47492599ee20739e8eb54fbf",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			}
