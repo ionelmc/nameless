@@ -16,6 +16,7 @@ default_context:
     django_model_name: Stuff
     django_project_name: nameless_project
     docker_compose_version: '3.8'
+    docker_lock: true
     dockerfile_version: '1'
     formatter_quote_style: double
     memcached_version: '1'

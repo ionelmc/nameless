@@ -19,7 +19,7 @@ while true; do
             echo -e "\033[1;34m[$(date -Iseconds)] Running collectstatic ..."
             (
                 set -x
-                docker exec ${COMPOSE_PROJECT_NAME}_web_1 pysu app django-admin collectstatic --no-input -v0
+                docker compose exec web pysu app django-admin collectstatic --no-input -v0
             ) || echo -e "\033[1;31m[$(date -Iseconds)] Failed to run collectstatic!"
         else
             echo -e "\033[1;34m[$(date -Iseconds)] Attempting restarts ..."
@@ -43,7 +43,7 @@ Or just run everything:
                     if [[ "$name" = web && -p /var/app/run/uwsgi.fifo ]]; then # check if the pipe exists
                         # and it actually has something connected to it
                         # (/bin/echo stuff <>path >path would get SIGPIPE if that pipe is dead)
-                        echo + echo r > /var/app/run/uwsgi.fifo
+                        echo '+ echo r > /var/app/run/uwsgi.fifo'
                         /bin/echo r 1<>/var/app/run/uwsgi.fifo >/var/app/run/uwsgi.fifo || docker compose restart web
                     else
                         set -x
@@ -54,6 +54,7 @@ Or just run everything:
             done
             wait "${pids[@]}"
         fi
+        break
     done < <(
         set -x
         fswatch \
@@ -68,7 +69,6 @@ Or just run everything:
             --event AttributeModified \
             --event MovedFrom \
             --event MovedTo \
-            --one-per-batch \
             --monitor ${RELOADER_MONITOR:-inotify}_monitor \
             /app/src/
     )
