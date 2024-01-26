@@ -5,10 +5,12 @@ default_context:
     compose_project_name: nmls
     deploy_ansible_host: 10.0.0.20
     deploy_ansible_port: '22'
+    deploy_cron: true
+    deploy_domain: demo.example.com
     deploy_email: admin@example.com
     deploy_name: demo
-    deploy_services: demo:demo.example.com demo_worker demo_cron
-    django_allowed_hosts: demo.example.com
+    deploy_uid: '2000'
+    deploy_worker: true
     django_app_name: nameless
     django_command_name: check_stuff
     django_model_name: Stuff

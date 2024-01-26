@@ -9,6 +9,7 @@ x-python:
       REQUIREMENTS: base
       DJANGO_SETTINGS_MODULE:
       DJANGO_COLLECTSTATIC: x
+      SERVER_NAME:
   environment:
     PYTHONHUNTER:
     PYTHONHUNTERCONFIG:
@@ -25,13 +26,16 @@ x-python:
     resources:
       limits:
         memory: ${MEMORY_LIMIT:-4G}
+  ulimits:
+    nproc: 16384
+    nofile:
+      soft: 65536
+      hard: 262144
   volumes:
     - .:/app
     - ./.home:/root
     - ./.home:/home/app
-    - ./.home:/var/app
     - ./.home/etc:/etc/app
-    - ./.home/logs:/app/logs
 services:
   pg:
     build:
@@ -48,20 +52,18 @@ services:
       '-c', 'log_min_duration_statement=1s',
     ]
     volumes:
-      - .:/app
       - ./.home:/root
 
   mc:
-    image: memcached:1@sha256:c4629131de471fcb0d7a054ca1f409c03d9be50a1678501bfdb04f492fe20e62
+    image: memcached:1@sha256:482b94566745f9cf2e524e5a07b6dc948a835fa1f0b35d9ee4aa923133446406
 
   redis:
-    image: redis:7@sha256:ea30bef6a1424d032295b90db20a869fc8db76331091543b7a80175cede7d887
+    image: redis:7@sha256:b5ddcd52d425a8e354696c022f392fe45fca928f68d6289e6bb4a709c3a74668
 
   cron:
     <<: *python
     depends_on:
       - pg
-    entrypoint: [ '/entrypoint.sh' ]
     command: [ 'pysu', 'app', '--', 'yacron', '--config=/etc/app/yacron.yml' ]
 
   web:
@@ -70,11 +72,9 @@ services:
       - pg
       - mc
       - redis
-    entrypoint: [ '/entrypoint.sh' ]
 
   worker:
     <<: *python
-    entrypoint: [ '/entrypoint.sh' ]
     command: [
       'pysu', 'app', '--',
       'django-admin', 'rqworker'
