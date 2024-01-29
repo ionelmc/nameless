@@ -41,10 +41,17 @@ Or just run everything:
             for name in "${!services[@]}"; do
                 (
                     if [[ "$name" = web && -p /var/app/run/uwsgi.fifo ]]; then # check if the pipe exists
-                        # and it actually has something connected to it
-                        # (/bin/echo stuff <>path >path would get SIGPIPE if that pipe is dead)
                         echo '+ echo r > /var/app/run/uwsgi.fifo'
+                        # and it actually has something connected to it
                         /bin/echo r 1<>/var/app/run/uwsgi.fifo >/var/app/run/uwsgi.fifo || docker compose restart web
+                        # how does it work?
+                        # - since `echo` is a shell builtin we have to use the /bin/echo to have a subprocess
+                        # - 1<>pipe opens the pipe as read-write, and dups it to stdout
+                        #   no, 1<pipe (open for read-only) would just get stuck without a writer
+                        # - >pipe opens the pipe again, but as write-only, dups it to stdout and, assuming the pipe is dead, only works
+                        #   because the previous temporary reader on the pipe (1<>pipe), otherwise the open call would just get stuck
+                        # - finally, now that stdout is successfully connected to pipe, failed writes to stdout would trigger a SIGPIPE
+                        #   and error out the subprocess
                     else
                         set -x
                         docker compose restart "$name"
