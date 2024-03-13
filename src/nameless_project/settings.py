@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 
 from . import env
 
-PROJECT_VERSION = "0.1.3"
+PROJECT_VERSION = "0.1.0"
 
 # This is the nameless_project directory
 BASE_DIR = Path(__file__).resolve().parent
@@ -59,7 +59,7 @@ EMAIL_BACKEND = env.str("DJANGO_EMAIL_BACKEND", "django.core.mail.backends.smtp.
 EMAIL_FILE_PATH = env.get("DJANGO_EMAIL_FILE_PATH")
 
 DEFAULT_FROM_EMAIL = env.get("DEFAULT_FROM_EMAIL")
-
+SERVER_EMAIL = env.str("SERVER_EMAIL", "root@localhost")
 
 # Application definition
 
@@ -110,13 +110,13 @@ TEMPLATES = [
 ]
 
 SETTINGS_EXPORT = [
-    "DEBUG",
-    "SERVER_NAME",
-    "SERVER_PROTOCOL",
-    "SERVER_PREFIX",
-    "SITE_NAME",
-    "PROJECT_VERSION",
     "ANALYTICS_GTAG",
+    "DEBUG",
+    "PROJECT_VERSION",
+    "SERVER_NAME",
+    "SERVER_PREFIX",
+    "SERVER_PROTOCOL",
+    "SITE_NAME",
 ]
 
 WSGI_APPLICATION = "nameless_project.wsgi.application"
@@ -126,12 +126,12 @@ WSGI_APPLICATION = "nameless_project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env.get("DJANGO_DB_NAME"),
-        "USER": env.get("DJANGO_DB_USER"),
-        "PASSWORD": env.get("DJANGO_DB_PASSWORD"),
-        "HOST": env.get("DJANGO_DB_HOST"),
         "ATOMIC_REQUESTS": True,
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env.get("DJANGO_DB_HOST"),
+        "NAME": env.get("DJANGO_DB_NAME"),
+        "PASSWORD": env.get("DJANGO_DB_PASSWORD"),
+        "USER": env.get("DJANGO_DB_USER"),
     }
 }
 
@@ -141,8 +141,9 @@ CACHES = {
             "DJANGO_CACHE_BACKEND",
             "django.core.cache.backends.dummy.DummyCache" if DEBUG else "django.core.cache.backends.locmem.LocMemCache",
         ),
-        "LOCATION": env.get("DJANGO_CACHE_LOCATION"),
         "KEY_PREFIX": env.get("DJANGO_CACHE_KEY_PREFIX"),
+        "LOCATION": env.get("DJANGO_CACHE_LOCATION"),
+        "TIMEOUT": env.int("DJANGO_CACHE_TIMEOUT", 0) or None,
     }
 }
 
@@ -230,7 +231,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "[%(asctime)s.%(msecs)d] %(name)s (%(levelname)s) %(message)s",
-            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
     "handlers": {
@@ -246,30 +247,17 @@ LOGGING = {
         },
     },
     "root": {
-        "level": "DEBUG",
+        "level": LOGGING_LEVEL,
         "handlers": ["console", "mail_admins"],
     },
     "loggers": {
-        "django.request": {
-            "level": LOGGING_LEVEL,
-            "handlers": ["console"],
-            "propagate": True,
-        },
-        "django.db.backends": {
-            "level": LOGGING_LEVEL,
-            "handlers": ["console"],
-            "propagate": False,
-        },
-        "asyncio": {
-            "level": "WARNING",
-            "handlers": ["console"],
-            "propagate": False,
-        },
-        "parso": {
-            "level": "WARNING",
-            "handlers": ["console"],
-            "propagate": False,
-        },
+        "django.request": {"level": LOGGING_LEVEL},
+        "django.db.backends": {"level": LOGGING_LEVEL},
+        "uvicorn": {"propagate": True},
+        "asyncio": {"level": "INFO"},
+        "parso": {"level": "WARNING"},
+        "httpcore": {"level": "WARNING"},
+        "httpx": {"level": "WARNING"},
     },
     "filters": {},
 }

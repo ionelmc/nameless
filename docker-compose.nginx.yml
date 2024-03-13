@@ -1,9 +1,6 @@
 version: '3.8'
 
 services:
-  pg:
-    ports:
-      - '5432:5432'
   nginx:
     build:
       context: .

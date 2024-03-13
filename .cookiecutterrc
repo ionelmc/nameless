@@ -15,22 +15,26 @@ default_context:
     django_command_name: check_stuff
     django_model_name: Stuff
     django_project_name: nameless_project
-    docker_compose_version: '3.8'
+    django_version: latest
+    docker_compose_version: latest
     docker_lock: true
-    dockerfile_version: '1'
+    dockerfile_version: latest
     formatter_quote_style: double
-    memcached_version: '1'
+    memcached_version: latest
     name: Nameless
-    pip_tools_version: 6.12.3
-    pip_version: 23.0.1
-    postgresql_version: '15'
-    project_version: 0.1.3
-    redis_version: '7'
+    pip_tools_version: latest
+    pip_version: latest
+    postgresql_version: latest
+    project_version: 0.1.0
+    redis_version: latest
     repo_name: nameless
+    ruff_unsafe_fixes: false
     sentry_dsn: ''
-    setuptools_version: 67.6.0
+    setuptools_version: latest
     short_description: An example project. Generated with ionelmc/cookiecutter-django-docker.
     timezone: Europe/Bucharest
-    ubuntu_release: jammy
-    ubuntu_version: '22.04'
+    ubuntu_release: latest
+    ubuntu_version: latest
+    uv_enabled: true
+    uv_version: latest
     worker: rq

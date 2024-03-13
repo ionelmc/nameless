@@ -34,7 +34,7 @@ x-python:
   volumes:
     - .:/app
     - ./.home:/root
-    - ./.home:/home/app
+    - ./.home:/var/app
     - ./.home/etc:/etc/app
 services:
   pg:
@@ -55,10 +55,10 @@ services:
       - ./.home:/root
 
   mc:
-    image: memcached:1@sha256:482b94566745f9cf2e524e5a07b6dc948a835fa1f0b35d9ee4aa923133446406
+    image: memcached:1@sha256:c9aaa31b14321d8c5c3fea2cc6596e76643aeb51cb3b6468fbdf9ef2bfcf95ca
 
   redis:
-    image: redis:7@sha256:b5ddcd52d425a8e354696c022f392fe45fca928f68d6289e6bb4a709c3a74668
+    image: redis:7@sha256:945c60060739a46d96e64ff6c60f180f1f78ab170a27771853302baf903688b6
 
   cron:
     <<: *python

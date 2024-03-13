@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1
-FROM buildpack-deps:22.04-scm@sha256:46e897007679d9cd13c832ee9972c4e328e43f45b4a9bfd4d280ae3a2517cfb8 as deps
+# syntax=docker/dockerfile:1.4
+FROM buildpack-deps:22.04-scm@sha256:44fd3f944013377caec06347436126c04837bbeebeffc6f1701f3ddd26f10b33 as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -23,7 +23,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==23.0.1 setuptools==67.6.0
+    pip==24.0 setuptools==69.2.0
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -44,7 +44,7 @@ EOF
 
 ##################################
 ##################################
-FROM buildpack-deps:22.04@sha256:e922cb558d2fb3df53a9c596b261acffae49963186679b046984d31052bcafa7 as certs
+FROM buildpack-deps:22.04@sha256:f028439d1e21418883b8ea83670b1bb142aae932caa17602f4542cd33cb85094 as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:22.04@sha256:e6173d4dc55e76b87c4af8db8821b1feae4146dd47341e4d431118c7dd060a74
+FROM ubuntu:22.04@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -99,7 +99,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==23.0.1 setuptools==67.6.0
+    pip==24.0 setuptools==69.2.0
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash
@@ -145,6 +145,7 @@ RUN ln -sf /proc/self/fd/2 /var/app/logs/error.log \
  && ln -sf /proc/self/fd/1 /shared/$SERVER_NAME/logs/access.log
 
 COPY src /app/src
+RUN python -mcompileall /app/src
 
 WORKDIR /app
 
@@ -155,7 +156,7 @@ COPY docker/python/nginx.conf /etc/app-latest
 COPY docker/python/nginx.site /etc/app-latest
 COPY docker/python/yacron.yml /etc/app-latest
 
-COPY --from=certs /certs/* /etc/app-defaults
+COPY --from=certs --chmod=0644 /certs/* /etc/app-defaults
 
 ARG SERVER_NAME="localhost"
 RUN <<EOF bash
