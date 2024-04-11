@@ -40,11 +40,8 @@ services:
   pg:
     build:
       context: docker/postgres
-    environment:
-      POSTGRES_USER:
-      POSTGRES_PASSWORD:
-      POSTGRES_DB:
-      PGDATA:
+    env_file:
+      - .env
     command: [
       'postgres',
       '-c', 'log_lock_waits=true',
@@ -55,10 +52,10 @@ services:
       - ./.home:/root
 
   mc:
-    image: memcached:1@sha256:c9aaa31b14321d8c5c3fea2cc6596e76643aeb51cb3b6468fbdf9ef2bfcf95ca
+    image: memcached:1@sha256:224efbcd38930137c6b877805174384ddbd896615c4c19f396d58e6b6287543d
 
   redis:
-    image: redis:7@sha256:945c60060739a46d96e64ff6c60f180f1f78ab170a27771853302baf903688b6
+    image: redis:7@sha256:ae02f2cf0b6568f529dd1993507c662accec1048bfe1f41f74937249f95ac8c6
 
   cron:
     <<: *python
