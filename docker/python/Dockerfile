@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM buildpack-deps:22.04-scm@sha256:44fd3f944013377caec06347436126c04837bbeebeffc6f1701f3ddd26f10b33 as deps
+FROM buildpack-deps:22.04-scm@sha256:7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -23,7 +23,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==24.0 setuptools==69.2.0
+    pip==24.0 setuptools==69.5.1
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -44,7 +44,7 @@ EOF
 
 ##################################
 ##################################
-FROM buildpack-deps:22.04@sha256:f028439d1e21418883b8ea83670b1bb142aae932caa17602f4542cd33cb85094 as certs
+FROM buildpack-deps:22.04@sha256:001680de9d796639a92d21384ece0d286cefe618ed671d4dd1283cb3c46e3876 as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:22.04@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e
+FROM ubuntu:22.04@sha256:a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -99,7 +99,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==24.0 setuptools==69.2.0
+    pip==24.0 setuptools==69.5.1
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash

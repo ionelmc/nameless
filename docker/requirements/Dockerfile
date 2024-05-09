@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4
-FROM buildpack-deps:22.04-scm@sha256:44fd3f944013377caec06347436126c04837bbeebeffc6f1701f3ddd26f10b33 as deps
+FROM buildpack-deps:22.04-scm@sha256:7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e as deps
 
 ARG TZ=UTC
 
@@ -26,7 +26,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    uv==0.1.31
+    uv==0.1.42
 EOF
 
 ENV CPUCOUNT=1
