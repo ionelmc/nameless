@@ -4,13 +4,13 @@
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "78b5fa911851dbaef60c702e5e2d74c3c3fdc22e6f0b9e1a5101a837cef4d42d",
+				"digest": "58225aeaf238b8d6ca5b0c7cfc7cb81f44cdebd1ca184f032478cf4470c89520",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
 				"tag": "15",
-				"digest": "1ebd963e5c598f944a4e9ba27de4c95289d663dcc73731025aa53c5254094d8f",
+				"digest": "4b4da96c37fefd6f28c3f58e7470bbc6d2cb34ac5641b9df7221d962eb4bc55d",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
@@ -38,7 +38,7 @@
 			{
 				"name": "redis",
 				"tag": "7",
-				"digest": "f14f42fc7e824b93c0e2fe3cdf42f68197ee0311c3d2e0235be37480b2e208e6",
+				"digest": "5a93f6b2e391b78e8bd3f9e7e1e1e06aeb5295043b4703fb88392835cec924a0",
 				"service": "redis"
 			},
 			{
@@ -76,7 +76,7 @@
 			{
 				"name": "postgres",
 				"tag": "15",
-				"digest": "1ebd963e5c598f944a4e9ba27de4c95289d663dcc73731025aa53c5254094d8f"
+				"digest": "4b4da96c37fefd6f28c3f58e7470bbc6d2cb34ac5641b9df7221d962eb4bc55d"
 			}
 		],
 		"docker/python/Dockerfile": [
