@@ -16,7 +16,7 @@ default_context:
     django_model_name: Stuff
     django_project_name: nameless_project
     django_version: latest
-    docker_lock: true
+    docker_lock: false
     dockerfile_version: latest
     formatter_quote_style: double
     memcached_version: latest

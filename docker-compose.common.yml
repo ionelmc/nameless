@@ -3,10 +3,10 @@
 # Volumes shouldn't either, but we're making a compromise for DRY-ness.
 services:
   mc:
-    image: memcached:1@sha256:58225aeaf238b8d6ca5b0c7cfc7cb81f44cdebd1ca184f032478cf4470c89520
+    image: memcached:1
 
   redis:
-    image: redis:7@sha256:5a93f6b2e391b78e8bd3f9e7e1e1e06aeb5295043b4703fb88392835cec924a0
+    image: redis:7
 
   pg:
     build:

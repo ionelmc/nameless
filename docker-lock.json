@@ -4,68 +4,68 @@
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "58225aeaf238b8d6ca5b0c7cfc7cb81f44cdebd1ca184f032478cf4470c89520",
+				"digest": "ef95745e5d2d762fbdf300a2d026311397257f8cb22dee4292d98472a99feb43",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
-				"tag": "15",
-				"digest": "4b4da96c37fefd6f28c3f58e7470bbc6d2cb34ac5641b9df7221d962eb4bc55d",
+				"tag": "16",
+				"digest": "c62fdb7fd6f519ef425c54760894c74e8d0cb04fbf4f7d3d79aafd86bae24edd",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04-scm",
-				"digest": "7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e",
+				"tag": "24.04-scm",
+				"digest": "bed3d809d5cbccf0f5f9ed8b0930d6d73e974bb00c520050e2fddf1734108eca",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04",
-				"digest": "001680de9d796639a92d21384ece0d286cefe618ed671d4dd1283cb3c46e3876",
+				"tag": "24.04",
+				"digest": "d1efe49d2a055c28dc6ccb292899eec33018a29fe267765b43a41f10eb5865e4",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "ubuntu",
-				"tag": "22.04",
-				"digest": "a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2",
+				"tag": "24.04",
+				"digest": "8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "redis",
 				"tag": "7",
-				"digest": "5a93f6b2e391b78e8bd3f9e7e1e1e06aeb5295043b4703fb88392835cec924a0",
+				"digest": "878983f8f5045b28384fc300268cec62bca3b14d5e1a448bec21f28cfcc7bf78",
 				"service": "redis"
 			},
 			{
 				"name": "ubuntu",
-				"tag": "22.04",
-				"digest": "a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2",
+				"tag": "24.04",
+				"digest": "8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee",
 				"dockerfile": "docker/reloader/Dockerfile",
 				"service": "reloader"
 			},
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04-scm",
-				"digest": "7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e",
+				"tag": "24.04-scm",
+				"digest": "bed3d809d5cbccf0f5f9ed8b0930d6d73e974bb00c520050e2fddf1734108eca",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04",
-				"digest": "001680de9d796639a92d21384ece0d286cefe618ed671d4dd1283cb3c46e3876",
+				"tag": "24.04",
+				"digest": "d1efe49d2a055c28dc6ccb292899eec33018a29fe267765b43a41f10eb5865e4",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "ubuntu",
-				"tag": "22.04",
-				"digest": "a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2",
+				"tag": "24.04",
+				"digest": "8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			}
@@ -75,39 +75,39 @@
 		"docker/postgres/Dockerfile": [
 			{
 				"name": "postgres",
-				"tag": "15",
-				"digest": "4b4da96c37fefd6f28c3f58e7470bbc6d2cb34ac5641b9df7221d962eb4bc55d"
+				"tag": "16",
+				"digest": "c62fdb7fd6f519ef425c54760894c74e8d0cb04fbf4f7d3d79aafd86bae24edd"
 			}
 		],
 		"docker/python/Dockerfile": [
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04-scm",
-				"digest": "7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e"
+				"tag": "24.04-scm",
+				"digest": "bed3d809d5cbccf0f5f9ed8b0930d6d73e974bb00c520050e2fddf1734108eca"
 			},
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04",
-				"digest": "001680de9d796639a92d21384ece0d286cefe618ed671d4dd1283cb3c46e3876"
+				"tag": "24.04",
+				"digest": "d1efe49d2a055c28dc6ccb292899eec33018a29fe267765b43a41f10eb5865e4"
 			},
 			{
 				"name": "ubuntu",
-				"tag": "22.04",
-				"digest": "a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2"
+				"tag": "24.04",
+				"digest": "8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee"
 			}
 		],
 		"docker/reloader/Dockerfile": [
 			{
 				"name": "ubuntu",
-				"tag": "22.04",
-				"digest": "a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2"
+				"tag": "24.04",
+				"digest": "8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee"
 			}
 		],
 		"docker/requirements/Dockerfile": [
 			{
 				"name": "buildpack-deps",
-				"tag": "22.04-scm",
-				"digest": "7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e"
+				"tag": "24.04-scm",
+				"digest": "bed3d809d5cbccf0f5f9ed8b0930d6d73e974bb00c520050e2fddf1734108eca"
 			}
 		]
 	}

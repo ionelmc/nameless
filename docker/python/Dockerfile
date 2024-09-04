@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.4
-FROM buildpack-deps:22.04-scm@sha256:7aec8bc038cae3c8626844127ec19e81e8379f0d1f4b826f41ca655442fca68e as deps
+# syntax=docker/dockerfile:1.9
+FROM buildpack-deps:24.04-scm as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -7,13 +7,13 @@ RUN <<EOF bash
     set -euxo pipefail
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main 15" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main 16" > /etc/apt/sources.list.d/pgdg.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     apt-get update
     apt-get install -y --no-install-recommends \
-        python3-dev python3-distutils-extra \
+        python3-dev \
         python-is-python3 \
-        libpq-dev=15.* libpq5=15.* \
+        libpq-dev=16.* libpq5=16.* \
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
@@ -22,8 +22,8 @@ RUN <<EOF bash
 EOF
 RUN <<EOF bash
     set -euxo pipefail
-    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==24.0 setuptools==69.5.1
+    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
+    pip==24.2 setuptools==74.1.1
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -44,7 +44,7 @@ EOF
 
 ##################################
 ##################################
-FROM buildpack-deps:22.04@sha256:001680de9d796639a92d21384ece0d286cefe618ed671d4dd1283cb3c46e3876 as certs
+FROM buildpack-deps:24.04 as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:22.04@sha256:a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2
+FROM ubuntu:24.04
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -65,8 +65,8 @@ RUN <<EOF bash
     apt-get update
     apt-get install -y --no-install-recommends \
         curl software-properties-common gpg-agent
-    echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main 15" > /etc/apt/sources.list.d/pgdg.list
-    echo "deb http://nginx.org/packages/mainline/ubuntu/ jammy nginx" > /etc/apt/sources.list.d/nginx.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main 16" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://nginx.org/packages/mainline/ubuntu/ noble nginx" > /etc/apt/sources.list.d/nginx.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     curl http://nginx.org/keys/nginx_signing.key | gpg --dearmor > /etc/apt/trusted.gpg.d/nginx.org.gpg
     apt-get update
@@ -76,8 +76,8 @@ RUN <<EOF bash
         rsync moreutils \
         graphviz \
         dumb-init \
-        libpq5=15.* postgresql-client-15 \
-        python3-dbg python3-distutils python3-distutils-extra \
+        libpq5=16.* postgresql-client-16 \
+        python3-dbg \
         python3-gdal gdal-bin \
         python-is-python3 \
         libmemcached11 libpcre3 \
@@ -98,14 +98,21 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 RUN <<EOF bash
     set -euxo pipefail
-    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade \
-    pip==24.0 setuptools==69.5.1
+    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
+        uv==0.4.4
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash
     set -eux
     if [[ -e /deps/wheels ]]; then
-        pip install --force-reinstall --ignore-installed --upgrade --no-index --no-deps /deps/wheels/*
+        uv pip install \
+            --link-mode=copy \
+            --compile-bytecode \
+            --no-python-downloads \
+            --system \
+            --reinstall \
+            --no-build \
+            --upgrade --no-index --no-deps --break-system-packages /deps/wheels/*
     else
         echo 'No wheels built!'
         exit 1
@@ -115,9 +122,14 @@ EOF
 # This is more geared to development (eg: match user's UID) than production (where you shouln't need any sudo/home).
 ARG USER_ID=1000
 ARG GROUP_ID=1000
-RUN groupadd --gid $GROUP_ID app || true \
- && useradd --uid $USER_ID --gid $GROUP_ID --shell /bin/bash --create-home app \
- && echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN <<EOF bash
+    set -eux
+    # clear leftover user that the 24.04 image has
+    userdel ubuntu || true
+    groupadd --gid $GROUP_ID app
+    useradd --uid $USER_ID --gid $GROUP_ID --shell /bin/bash --create-home app
+    echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+EOF
 
 ENV PYTHONUNBUFFERED=x
 ENV PYTHONFAULTHANDLER=x

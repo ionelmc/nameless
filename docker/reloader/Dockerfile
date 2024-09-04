@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.4
-FROM ubuntu:22.04@sha256:a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2
+# syntax=docker/dockerfile:1.9
+FROM ubuntu:24.04
 
 # Note: this uses ubuntu as the base instead of a more lightweight image
 # like alpine because fswatch ain't in alpine and we want to use it instead
