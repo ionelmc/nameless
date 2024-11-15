@@ -23,7 +23,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    pip==24.2 setuptools==74.1.1
+    pip==24.3.1 setuptools==75.5.0
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -89,7 +89,7 @@ EOF
 ARG TZ=Europe/Bucharest
 
 # Force a sensible default encoding (affects terminal output and filename handling).
-# See: https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/uwsgi/
+# See: https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/uwsgi/
 # Note that for en_US.UTF-8 you need to install and compile locales, seems overkill...
 ENV LANG=C.UTF-8
 
@@ -99,7 +99,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-        uv==0.4.4
+        uv==0.5.2
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash

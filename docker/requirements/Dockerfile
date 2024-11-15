@@ -26,7 +26,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    uv==0.4.4
+    uv==0.5.2
 EOF
 
 ENV CPUCOUNT=1
