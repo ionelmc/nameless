@@ -3,6 +3,7 @@
 default_context:
     analytics_gtag: G-
     compose_project_name: nmls
+    debian_release: latest
     deploy_ansible_host: 10.0.0.20
     deploy_ansible_port: '22'
     deploy_cron: true
@@ -25,6 +26,7 @@ default_context:
     pip_version: latest
     postgresql_version: latest
     project_version: 0.1.0
+    python_version: latest
     redis_version: latest
     repo_name: nameless
     ruff_unsafe_fixes: false
@@ -32,8 +34,5 @@ default_context:
     setuptools_version: latest
     short_description: An example project. Generated with ionelmc/cookiecutter-django-docker.
     timezone: Europe/Bucharest
-    ubuntu_release: latest
-    ubuntu_version: latest
-    uv_enabled: true
     uv_version: latest
     worker: rq

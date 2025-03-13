@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.9
-FROM buildpack-deps:24.04-scm as deps
+FROM python:3.13-bookworm
 
 ARG TZ=UTC
 
@@ -9,13 +9,13 @@ RUN <<EOF bash
     set -euxo pipefail
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main 16" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     apt-get update
     apt-get install -y --no-install-recommends \
         python3-dev \
         python-is-python3 \
-        libpq-dev=16.* libpq5=16.* \
+        libpq-dev=17.* libpq5=17.* \
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
@@ -26,7 +26,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    uv==0.5.2
+    uv==0.6.6
 EOF
 
 ENV CPUCOUNT=1
@@ -34,8 +34,6 @@ ARG USER_ID=1000
 ARG GROUP_ID=1000
 RUN <<EOF bash
     set -eux
-    # clear leftover user that the 24.04 image has
-    userdel ubuntu || true
     groupadd --gid $GROUP_ID app
     useradd --uid $USER_ID --gid $GROUP_ID --shell /bin/bash --create-home app
     echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers

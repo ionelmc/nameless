@@ -55,6 +55,8 @@ BUILD_ARGS="--build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --build-
 if [[ -z "$(find requirements -maxdepth 1 -name '*.txt' -print -quit)" ]] || [[ "$*" == "requirements" ]]; then
     set -x
     docker compose build $BUILD_ARGS requirements
+    mkdir -p .home/requirements
+    chown -R $USER_ID .home/requirements
     docker compose run --rm --user=$USER_ID requirements
     if [[ "$*" == "requirements" ]]; then
         exit

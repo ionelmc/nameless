@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.9
-FROM buildpack-deps:24.04-scm as deps
+FROM python:3.13-bookworm as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -7,13 +7,13 @@ RUN <<EOF bash
     set -euxo pipefail
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main 16" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     apt-get update
     apt-get install -y --no-install-recommends \
         python3-dev \
         python-is-python3 \
-        libpq-dev=16.* libpq5=16.* \
+        libpq-dev=17.* libpq5=17.* \
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
@@ -23,7 +23,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    pip==24.3.1 setuptools==75.5.0
+    pip==25.0.1 setuptools==76.0.0
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -44,7 +44,7 @@ EOF
 
 ##################################
 ##################################
-FROM buildpack-deps:24.04 as certs
+FROM python:3.13-bookworm as certs
 ##################################
 ARG SERVER_NAME="localhost"
 RUN mkdir /certs \
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM ubuntu:24.04
+FROM python:3.13-slim-bookworm
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -65,8 +65,8 @@ RUN <<EOF bash
     apt-get update
     apt-get install -y --no-install-recommends \
         curl software-properties-common gpg-agent
-    echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main 16" > /etc/apt/sources.list.d/pgdg.list
-    echo "deb http://nginx.org/packages/mainline/ubuntu/ noble nginx" > /etc/apt/sources.list.d/nginx.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://nginx.org/packages/mainline/debian/ bookworm nginx" > /etc/apt/sources.list.d/nginx.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     curl http://nginx.org/keys/nginx_signing.key | gpg --dearmor > /etc/apt/trusted.gpg.d/nginx.org.gpg
     apt-get update
@@ -76,13 +76,14 @@ RUN <<EOF bash
         rsync moreutils \
         graphviz \
         dumb-init \
-        libpq5=16.* postgresql-client-16 \
+        libpq5=17.* postgresql-client-17 \
         python3-dbg \
         python3-gdal gdal-bin \
         python-is-python3 \
         libmemcached11 libpcre3 \
         sudo ca-certificates \
         nginx \
+        gettext \
         tzdata
 EOF
 
@@ -99,7 +100,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-        uv==0.5.2
+        uv==0.6.6
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash
@@ -124,8 +125,6 @@ ARG USER_ID=1000
 ARG GROUP_ID=1000
 RUN <<EOF bash
     set -eux
-    # clear leftover user that the 24.04 image has
-    userdel ubuntu || true
     groupadd --gid $GROUP_ID app
     useradd --uid $USER_ID --gid $GROUP_ID --shell /bin/bash --create-home app
     echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers

@@ -1,4 +1,4 @@
-FROM postgres:16
+FROM postgres:17
 
 RUN if which apk; then apk --no-cache add shadow; fi
 ARG UID=1000
