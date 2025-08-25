@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.9
-FROM python:3.13-bookworm
+FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960
 
 ARG TZ=UTC
 
@@ -17,7 +17,7 @@ RUN <<EOF bash
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
-        libmemcached-dev zlib1g-dev libpcre3-dev \
+        zlib1g-dev libpcre3-dev \
         build-essential git sudo ca-certificates
 EOF
 

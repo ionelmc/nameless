@@ -3,10 +3,10 @@
 # Volumes shouldn't either, but we're making a compromise for DRY-ness.
 services:
   mc:
-    image: memcached:1
+    image: memcached:1@sha256:3e4cfa8274fc07f27f040ec994c7506a4438a835e2e229673b3da06c8c3d99b2
 
   redis:
-    image: redis:7
+    image: redis:7@sha256:4421962706d7a901cbd435282515704040203d67c653160e3a46a27b79c40e19
 
   pg:
     build:
@@ -41,7 +41,7 @@ services:
     ]
 
   pgupgrade:
-    image: pgautoupgrade/pgautoupgrade:17-bookworm
+    image: pgautoupgrade/pgautoupgrade:17-bookworm@sha256:6ce11cbff9ceb6cfa591bc642bbb1cf6dde41c136fde336a57e561a34051d8f5
     environment:
       POSTGRES_PASSWORD: app
       PGAUTO_ONESHOT: yes

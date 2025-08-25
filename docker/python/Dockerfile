@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.9
-FROM python:3.13-bookworm as deps
+FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960 as deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -15,7 +15,7 @@ RUN <<EOF bash
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
-        libmemcached-dev zlib1g-dev libpcre3-dev \
+        zlib1g-dev libpcre3-dev \
         build-essential git sudo ca-certificates
 EOF
 RUN <<EOF bash
@@ -42,7 +42,7 @@ EOF
 
 ##################################
 ##################################
-FROM python:3.13-bookworm as certs
+FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960 as certs
 ##################################
 ARG SERVER_NAME="localhost"
 
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM python:3.13-slim-bookworm
+FROM python:3.13-slim-bookworm@sha256:9b8102b7b3a61db24fe58f335b526173e5aeaaf7d13b2fbfb514e20f84f5e386
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -77,7 +77,7 @@ RUN <<EOF bash
         graphviz \
         dumb-init \
         libpq5=17.* postgresql-client-17 \
-        libmemcached11 libpcre3 \
+        libpcre3 \
         sudo ca-certificates \
         nginx \
         gettext \
