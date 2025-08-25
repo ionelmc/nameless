@@ -1,10 +1,9 @@
 # syntax=docker/dockerfile:1.9
-FROM python:3.13-slim-bookworm
-
-# Note: this uses python (debian) as the base instead of a more lightweight image
-# like alpine because fswatch ain't in alpine and we want to use it instead
-# of inotifywait which only supports Linux
-# (iow: to support Docker for Windows and other setups with strange storage)
+FROM ubuntu:latest
+# Notes:
+# - Debian-based images don't have docker tooling
+# - Alpine-based images don't have fswatch (inotifywait only supports Linux filesystems)
+# - Official Docker images are all Alpine-based
 
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
