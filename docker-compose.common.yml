@@ -41,7 +41,7 @@ services:
     ]
 
   pgupgrade:
-    image: pgautoupgrade/pgautoupgrade:17-bookworm@sha256:6ce11cbff9ceb6cfa591bc642bbb1cf6dde41c136fde336a57e561a34051d8f5
+    image: pgautoupgrade/pgautoupgrade:17-bookworm@sha256:4b496f7c82ec074e862c90b37596eb4959b42a69d9b78d4aa5c76a47f26f7b51
     environment:
       POSTGRES_PASSWORD: app
       PGAUTO_ONESHOT: yes

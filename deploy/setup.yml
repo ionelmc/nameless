@@ -1,7 +1,7 @@
 - hosts: all
   tasks:
     - name: debug
-      tags: [env]
+      tags: [ env ]
       vars:
         msg:
           registry_host: '{{ registry_host }}'
@@ -40,7 +40,7 @@
         - '{{ service_name }}'
         - pg
     - name: 'copy .env'
-      tags: [env]
+      tags: [ env ]
       copy:
         src: '{{ inventory_dir }}/.env'
         dest: '/services/{{ service_name }}/.env'
@@ -91,7 +91,7 @@
           - containerd.io
           - docker-compose-plugin
     - name: get available compose files
-      tags: [always]
+      tags: [ always ]
       find:
         paths: /services
         patterns: docker-compose*.yml
@@ -103,7 +103,7 @@
     COMPOSE_FILE: '{{ compose_files }}'
   tasks:
     - name: set default docker-compose.yml in environment
-      tags: [env]
+      tags: [ env ]
       lineinfile:
         dest: /etc/environment
         regexp: '^COMPOSE_FILE='
@@ -125,14 +125,14 @@
         to: any
         port: '443'
     - name: log deployment
-      tags: [always]
+      tags: [ always ]
       lineinfile:
         create: true
         dest: /services/deploy.log
         line: ===== {{ inventory_dir|basename }} setup @ {{ now() }} =====
     - name: update services after env update
       when: envfile.changed and compose_files
-      tags: [env]
+      tags: [ env ]
       shell:
         executable: /bin/bash
         cmd: |

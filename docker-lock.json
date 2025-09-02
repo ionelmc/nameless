@@ -17,7 +17,7 @@
 			{
 				"name": "pgautoupgrade/pgautoupgrade",
 				"tag": "17-bookworm",
-				"digest": "6ce11cbff9ceb6cfa591bc642bbb1cf6dde41c136fde336a57e561a34051d8f5",
+				"digest": "4b496f7c82ec074e862c90b37596eb4959b42a69d9b78d4aa5c76a47f26f7b51",
 				"service": "pgupgrade"
 			},
 			{
@@ -50,7 +50,7 @@
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "7c06e91f61fa88c08cc74f7e1b7c69ae24910d745357e0dfe1d2c0322aaf20f9",
+				"digest": "f3b7f1bdfaf22a0a8db05bb2b758535fe0e70d82bea4206f7549f89aa12922f4",
 				"dockerfile": "docker/reloader/Dockerfile",
 				"service": "reloader"
 			},
@@ -106,7 +106,7 @@
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "7c06e91f61fa88c08cc74f7e1b7c69ae24910d745357e0dfe1d2c0322aaf20f9"
+				"digest": "f3b7f1bdfaf22a0a8db05bb2b758535fe0e70d82bea4206f7549f89aa12922f4"
 			}
 		],
 		"docker/requirements/Dockerfile": [
