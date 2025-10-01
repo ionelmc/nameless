@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.9
-FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960
+# syntax=docker/dockerfile:1
+FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196
 
 ARG TZ=UTC
 
@@ -9,11 +9,11 @@ RUN <<EOF bash
     set -euxo pipefail
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt trixie-pgdg main 18" > /etc/apt/sources.list.d/pgdg.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     apt-get update
     apt-get install -y --no-install-recommends \
-        libpq-dev=17.* libpq5=17.* \
+        libpq-dev=18.* libpq5=18.* \
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
@@ -23,8 +23,7 @@ EOF
 
 RUN <<EOF bash
     set -euxo pipefail
-    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    uv==0.8.14
+    curl -fsSL https://github.com/astral-sh/uv/releases/download/0.8.22/uv-installer.sh | XDG_BIN_HOME=/usr/local/bin sh
 EOF
 
 ENV CPUCOUNT=1

@@ -3,10 +3,10 @@
 # Volumes shouldn't either, but we're making a compromise for DRY-ness.
 services:
   mc:
-    image: memcached:1@sha256:3e4cfa8274fc07f27f040ec994c7506a4438a835e2e229673b3da06c8c3d99b2
+    image: memcached:1@sha256:1d21225e718231ce785656df8da44b33d4237c0d10cfeac174c81f687925afbe
 
   redis:
-    image: redis:7@sha256:4421962706d7a901cbd435282515704040203d67c653160e3a46a27b79c40e19
+    image: redis:8@sha256:d7d4d31df9dab3b23c2e2e0731cdf44d2ccdb51e08f8d932e7dfff8aa0b8fa54
 
   pg:
     build:
@@ -40,11 +40,11 @@ services:
 #      '-c', 'synchronous_commit=off',
     ]
 
-  pgupgrade:
-    image: pgautoupgrade/pgautoupgrade:17-bookworm@sha256:4b496f7c82ec074e862c90b37596eb4959b42a69d9b78d4aa5c76a47f26f7b51
-    environment:
-      POSTGRES_PASSWORD: app
-      PGAUTO_ONESHOT: yes
+#  pgupgrade:
+#    image: pgautoupgrade/pgautoupgrade:18-trixie
+#    environment:
+#      POSTGRES_PASSWORD: app
+#      PGAUTO_ONESHOT: yes
 
   python:
     build:
@@ -64,6 +64,7 @@ services:
       DJANGO_DEBUG_SQL:
       DJANGO_DEBUG_SQL_LIMIT:
       DJANGO_DEBUG_TOOLBAR:
+      DJANGO_SILK:
       LOGGING_LEVEL:
       LOGGING_PATH:
     deploy:

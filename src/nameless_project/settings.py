@@ -42,6 +42,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 DEBUG_SQL = env.bool("DJANGO_DEBUG_SQL", False)
 DEBUG_SQL_LIMIT = env.int("DJANGO_DEBUG_SQL_LIMIT", 5)
 DEBUG_TOOLBAR = env.bool("DJANGO_DEBUG_TOOLBAR", False)
+DEBUG_SILK = env.bool("DJANGO_DEBUG_SILK", False)
 LOGGING_PATH = env.get("LOGGING_PATH")
 LOGGING_LEVEL = env.str("LOGGING_LEVEL", "INFO")
 
@@ -266,27 +267,35 @@ LOGGING = {
 
 # Advanced debug settings
 SENTRY_DSN = env.get("SENTRY_DSN")
+SENTRY_TRACE = env.float("SENTRY_TRACE", 1.0)
 if SENTRY_DSN:
     import logging
 
     import sentry_sdk
+    from django.http import Http404
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.logging import ignore_logger
 
     ignore_logger("django.security.DisallowedHost")
     sentry_sdk.init(
-        release=f"nameless_project@{PROJECT_VERSION}",
+        debug=DEBUG,
         dsn=SENTRY_DSN,
+        ignore_errors=[Http404],
         integrations=[
-            DjangoIntegration(),
+            DjangoIntegration(
+                middleware_spans=False,
+                signals_spans=False,
+                transaction_style="url",
+            ),
             LoggingIntegration(
                 level=logging.INFO,
                 event_level=logging.ERROR,
             ),
         ],
+        max_value_length=64 * 1024,
+        release=f"nameless_project@{PROJECT_VERSION}",
         send_default_pii=True,
-        auto_session_tracking=False,
     )
 
 if DEBUG_SQL:
@@ -357,6 +366,16 @@ if DEBUG:
         "rosetta",
     ]
 
+if DEBUG_SILK:
+    SILKY_ANALYZE_QUERIES = False
+    SILKY_PYTHON_PROFILER = True
+    SILKY_PYTHON_PROFILER_BINARY = True
+
+    MIDDLEWARE.insert(0, "silk.middleware.SilkyMiddleware")
+    INSTALLED_APPS += [
+        "silk",
+    ]
+
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += [
         "debug_toolbar",
@@ -365,15 +384,10 @@ if DEBUG_TOOLBAR:
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": lambda _: DEBUG,
     }
+    from debug_toolbar.settings import PANELS_DEFAULTS
+
     DEBUG_TOOLBAR_PANELS = [
+        *PANELS_DEFAULTS,
         "django_uwsgi.panels.UwsgiWorkersPanel",
         "django_uwsgi.panels.UwsgiActionsPanel",
-        "debug_toolbar.panels.timer.TimerPanel",
-        "debug_toolbar.panels.sql.SQLPanel",
-        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
-        "debug_toolbar.panels.templates.TemplatesPanel",
-        "debug_toolbar.panels.cache.CachePanel",
-        "debug_toolbar.panels.signals.SignalsPanel",
-        "debug_toolbar.panels.redirects.RedirectsPanel",
-        "debug_toolbar.panels.profiling.ProfilingPanel",
     ]

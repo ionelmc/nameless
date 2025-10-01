@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.9
-FROM ubuntu:latest@sha256:f3b7f1bdfaf22a0a8db05bb2b758535fe0e70d82bea4206f7549f89aa12922f4
+# syntax=docker/dockerfile:1
+FROM ubuntu:latest@sha256:353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc
 # Notes:
 # - Debian-based images don't have docker tooling
 # - Alpine-based images don't have fswatch (inotifywait only supports Linux filesystems)

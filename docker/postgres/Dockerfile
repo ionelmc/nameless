@@ -1,4 +1,4 @@
-FROM postgres:17@sha256:29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0
+FROM postgres:18@sha256:67a7c384da54fc55a3b5ad38e9853b76003603d12732c90af368b31bb1f2517f
 
 RUN if which apk; then apk --no-cache add shadow; fi
 ARG UID=1000

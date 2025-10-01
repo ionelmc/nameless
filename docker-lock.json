@@ -4,74 +4,68 @@
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "3e4cfa8274fc07f27f040ec994c7506a4438a835e2e229673b3da06c8c3d99b2",
+				"digest": "1d21225e718231ce785656df8da44b33d4237c0d10cfeac174c81f687925afbe",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
-				"tag": "17",
-				"digest": "29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0",
+				"tag": "18",
+				"digest": "67a7c384da54fc55a3b5ad38e9853b76003603d12732c90af368b31bb1f2517f",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
 			{
-				"name": "pgautoupgrade/pgautoupgrade",
-				"tag": "17-bookworm",
-				"digest": "4b496f7c82ec074e862c90b37596eb4959b42a69d9b78d4aa5c76a47f26f7b51",
-				"service": "pgupgrade"
-			},
-			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960",
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960",
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-bookworm",
-				"digest": "9b8102b7b3a61db24fe58f335b526173e5aeaaf7d13b2fbfb514e20f84f5e386",
+				"tag": "3.13-slim-trixie",
+				"digest": "3a6ead7603d322b80dd718d3834dcab86977c73b066028226afd8d0cdf1b0b12",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "redis",
-				"tag": "7",
-				"digest": "4421962706d7a901cbd435282515704040203d67c653160e3a46a27b79c40e19",
+				"tag": "8",
+				"digest": "d7d4d31df9dab3b23c2e2e0731cdf44d2ccdb51e08f8d932e7dfff8aa0b8fa54",
 				"service": "redis"
 			},
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "f3b7f1bdfaf22a0a8db05bb2b758535fe0e70d82bea4206f7549f89aa12922f4",
+				"digest": "353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc",
 				"dockerfile": "docker/reloader/Dockerfile",
 				"service": "reloader"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960",
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960",
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-bookworm",
-				"digest": "9b8102b7b3a61db24fe58f335b526173e5aeaaf7d13b2fbfb514e20f84f5e386",
+				"tag": "3.13-slim-trixie",
+				"digest": "3a6ead7603d322b80dd718d3834dcab86977c73b066028226afd8d0cdf1b0b12",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			}
@@ -81,39 +75,39 @@
 		"docker/postgres/Dockerfile": [
 			{
 				"name": "postgres",
-				"tag": "17",
-				"digest": "29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0"
+				"tag": "18",
+				"digest": "67a7c384da54fc55a3b5ad38e9853b76003603d12732c90af368b31bb1f2517f"
 			}
 		],
 		"docker/python/Dockerfile": [
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960"
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960"
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-bookworm",
-				"digest": "9b8102b7b3a61db24fe58f335b526173e5aeaaf7d13b2fbfb514e20f84f5e386"
+				"tag": "3.13-slim-trixie",
+				"digest": "3a6ead7603d322b80dd718d3834dcab86977c73b066028226afd8d0cdf1b0b12"
 			}
 		],
 		"docker/reloader/Dockerfile": [
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "f3b7f1bdfaf22a0a8db05bb2b758535fe0e70d82bea4206f7549f89aa12922f4"
+				"digest": "353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc"
 			}
 		],
 		"docker/requirements/Dockerfile": [
 			{
 				"name": "python",
-				"tag": "3.13-bookworm",
-				"digest": "aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960"
+				"tag": "3.13-trixie",
+				"digest": "716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196"
 			}
 		]
 	}

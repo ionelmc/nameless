@@ -82,5 +82,5 @@ services:
     image: memcached:1
     restart: always
   redis:
-    image: redis:7
+    image: redis:8
     restart: always

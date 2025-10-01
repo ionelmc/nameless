@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:1.9
-FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960 as deps
+# syntax=docker/dockerfile:1
+FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196 AS deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -7,11 +7,11 @@ RUN <<EOF bash
     set -euxo pipefail
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt trixie-pgdg main 18" > /etc/apt/sources.list.d/pgdg.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     apt-get update
     apt-get install -y --no-install-recommends \
-        libpq-dev=17.* libpq5=17.* \
+        libpq-dev=18.* libpq5=18.* \
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
@@ -42,7 +42,7 @@ EOF
 
 ##################################
 ##################################
-FROM python:3.13-bookworm@sha256:aba8a0cd72f259c2737c8a47050652036c8bc8266a4f39291523a45cf8081960 as certs
+FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196 AS certs
 ##################################
 ARG SERVER_NAME="localhost"
 
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM python:3.13-slim-bookworm@sha256:9b8102b7b3a61db24fe58f335b526173e5aeaaf7d13b2fbfb514e20f84f5e386
+FROM python:3.13-slim-trixie@sha256:3a6ead7603d322b80dd718d3834dcab86977c73b066028226afd8d0cdf1b0b12
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -65,8 +65,8 @@ RUN <<EOF bash
     apt-get update
     apt-get install -y --no-install-recommends \
         curl software-properties-common gpg-agent
-    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main 17" > /etc/apt/sources.list.d/pgdg.list
-    echo "deb http://nginx.org/packages/mainline/debian/ bookworm nginx" > /etc/apt/sources.list.d/nginx.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt trixie-pgdg main 18" > /etc/apt/sources.list.d/pgdg.list
+    echo "deb http://nginx.org/packages/mainline/debian/ trixie nginx" > /etc/apt/sources.list.d/nginx.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
     curl http://nginx.org/keys/nginx_signing.key | gpg --dearmor > /etc/apt/trusted.gpg.d/nginx.org.gpg
     apt-get update
@@ -76,7 +76,7 @@ RUN <<EOF bash
         rsync moreutils \
         graphviz \
         dumb-init \
-        libpq5=17.* postgresql-client-17 \
+        libpq5=18.* postgresql-client-18 \
         libpcre3 \
         sudo ca-certificates \
         nginx \
@@ -96,8 +96,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 RUN <<EOF bash
     set -euxo pipefail
-    curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-        uv==0.8.14
+    curl -fsSL https://github.com/astral-sh/uv/releases/download/0.8.22/uv-installer.sh | XDG_BIN_HOME=/usr/local/bin sh
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash
@@ -160,14 +159,14 @@ COPY --link entrypoint.sh /
 COPY --link uwsgi.ini /etc/app-latest/
 COPY --link worker.ini /etc/app-latest/
 COPY --link nginx.conf /etc/app-latest/
-COPY --link nginx.site /etc/app-latest/
+COPY --link nginx.site.conf /etc/app-latest/
 COPY --link yacron.yml /etc/app-latest/
 COPY --link --from=certs --chmod=0644 /certs/* /etc/app-defaults/
 
 ARG SERVER_NAME="localhost"
 RUN <<EOF bash
     set -euxo pipefail
-    envsubst '\$SERVER_NAME' < /etc/app-latest/nginx.site | sponge /etc/app-latest/nginx.site
+    envsubst '\$SERVER_NAME' < /etc/app-latest/nginx.site.conf | sponge /etc/app-latest/nginx.site.conf
 EOF
 RUN ln -s cert.pem /etc/app-defaults/chain.pem \
  && ln -s cert.pem /etc/app-defaults/fullchain.pem \
