@@ -75,8 +75,7 @@
           - apt-transport-https
           - ca-certificates
           - curl
-          - gnupg-agent
-          - software-properties-common
+          - gnupg
     - name: install docker.com key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
@@ -108,6 +107,12 @@
         dest: /etc/environment
         regexp: '^COMPOSE_FILE='
         line: 'COMPOSE_FILE={{ compose_files|quote }}'
+    - name: disable compose menu
+      tags: [ env ]
+      lineinfile:
+        dest: /etc/environment
+        regexp: '^COMPOSE_MENU='
+        line: 'COMPOSE_MENU=0'
     - name: allow http
       loop: '{{ groups.web }}'
       ufw:

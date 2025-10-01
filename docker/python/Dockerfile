@@ -15,7 +15,7 @@ RUN <<EOF bash
         libgdal-dev \
         libtiff-dev libjpeg-dev libzip-dev libfreetype-dev \
         libwebp-dev tcl-dev tk-dev libffi-dev \
-        zlib1g-dev libpcre3-dev \
+        zlib1g-dev libpcre2-dev \
         build-essential git sudo ca-certificates
 EOF
 RUN <<EOF bash
@@ -64,7 +64,7 @@ RUN <<EOF bash
 
     apt-get update
     apt-get install -y --no-install-recommends \
-        curl software-properties-common gpg-agent
+        curl gnupg
     echo "deb http://apt.postgresql.org/pub/repos/apt trixie-pgdg main 18" > /etc/apt/sources.list.d/pgdg.list
     echo "deb http://nginx.org/packages/mainline/debian/ trixie nginx" > /etc/apt/sources.list.d/nginx.list
     curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg
@@ -77,7 +77,7 @@ RUN <<EOF bash
         graphviz \
         dumb-init \
         libpq5=18.* postgresql-client-18 \
-        libpcre3 \
+        libpcre2-8-0 \
         sudo ca-certificates \
         nginx \
         gettext \

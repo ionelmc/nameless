@@ -4,7 +4,7 @@ default_context:
     analytics_gtag: G-
     compose_project_name: nmls
     debian_release: latest
-    deploy_ansible_host: 10.0.0.20
+    deploy_ansible_host: 10.0.0.11
     deploy_ansible_port: '22'
     deploy_cron: true
     deploy_domain: demo.example.com
