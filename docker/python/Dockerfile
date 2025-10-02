@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196 AS deps
+FROM python:3.13-trixie@sha256:83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9 AS deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -42,7 +42,7 @@ EOF
 
 ##################################
 ##################################
-FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196 AS certs
+FROM python:3.13-trixie@sha256:83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9 AS certs
 ##################################
 ARG SERVER_NAME="localhost"
 
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM python:3.13-slim-trixie@sha256:3a6ead7603d322b80dd718d3834dcab86977c73b066028226afd8d0cdf1b0b12
+FROM python:3.13-slim-trixie@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 

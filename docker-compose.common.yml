@@ -3,10 +3,10 @@
 # Volumes shouldn't either, but we're making a compromise for DRY-ness.
 services:
   mc:
-    image: memcached:1@sha256:1d21225e718231ce785656df8da44b33d4237c0d10cfeac174c81f687925afbe
+    image: memcached:1@sha256:157c563eef6954ac0bc583c36def96d8ed2d3b3c5b37214f27d210ac53942386
 
   redis:
-    image: redis:8@sha256:d7d4d31df9dab3b23c2e2e0731cdf44d2ccdb51e08f8d932e7dfff8aa0b8fa54
+    image: redis:8@sha256:5fa2edb1e408fa8235e6db8fab01d1afaaae96c9403ba67b70feceb8661e8621
 
   pg:
     build:
@@ -84,8 +84,6 @@ services:
       - ./.home:/home/app
       - ./.home:/var/app
     init: true
-    env_file:
-      - .env
 
   worker:
     extends:

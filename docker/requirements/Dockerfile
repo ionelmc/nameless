@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.13-trixie@sha256:716cd434754a988d55cb51f6aecd68e29446773582b100b497e4ef999f4a7196
+FROM python:3.13-trixie@sha256:83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9
 
 ARG TZ=UTC
 
