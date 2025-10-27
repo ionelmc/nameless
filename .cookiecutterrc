@@ -22,7 +22,6 @@ default_context:
     formatter_quote_style: double
     memcached_version: latest
     name: Nameless
-    pip_tools_version: latest
     pip_version: latest
     postgresql_version: latest
     project_version: 0.1.0

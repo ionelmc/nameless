@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.13-trixie@sha256:83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9 AS deps
+FROM python:3.14-trixie@sha256:6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e AS deps
 
 # DEBIAN_FRONTEND=noninteractive exists to prevent tzdata going nuts.
 # Maybe dpkg incorrectly detects interactive on buildkit containers?
@@ -21,7 +21,7 @@ EOF
 RUN <<EOF bash
     set -euxo pipefail
     curl -fsSL 'https://bootstrap.pypa.io/get-pip.py' | python - --no-cache --disable-pip-version-check --upgrade --break-system-packages \
-    pip==25.2 setuptools==80.9.0
+    pip==25.3 setuptools==80.9.0
 EOF
 
 # This intents to be the sole Dockerfile for the project so allow building variants with different or no dependencies.
@@ -42,7 +42,7 @@ EOF
 
 ##################################
 ##################################
-FROM python:3.13-trixie@sha256:83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9 AS certs
+FROM python:3.14-trixie@sha256:6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e AS certs
 ##################################
 ARG SERVER_NAME="localhost"
 
@@ -54,7 +54,7 @@ RUN mkdir /certs \
 
 #################
 #################
-FROM python:3.13-slim-trixie@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689
+FROM python:3.14-slim-trixie@sha256:4ed33101ee7ec299041cc41dd268dae17031184be94384b1ce7936dc4e5dead3
 #################
 RUN test -e /etc/apt/apt.conf.d/docker-clean # sanity check
 
@@ -96,7 +96,7 @@ RUN ln -fs /usr/share/zoneinfo/$TZ /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 RUN <<EOF bash
     set -euxo pipefail
-    curl -fsSL https://github.com/astral-sh/uv/releases/download/0.8.22/uv-installer.sh | XDG_BIN_HOME=/usr/local/bin sh
+    curl -fsSL https://github.com/astral-sh/uv/releases/download/0.9.5/uv-installer.sh | XDG_BIN_HOME=/usr/local/bin sh
 EOF
 
 RUN --mount=type=bind,from=deps,src=/deps,target=/deps <<EOF bash

@@ -4,68 +4,68 @@
 			{
 				"name": "memcached",
 				"tag": "1",
-				"digest": "157c563eef6954ac0bc583c36def96d8ed2d3b3c5b37214f27d210ac53942386",
+				"digest": "edbe8e8cf9014c5b2ed90b498facc32a590a607e5438899df63d51e3369e68cb",
 				"service": "mc"
 			},
 			{
 				"name": "postgres",
 				"tag": "18",
-				"digest": "073e7c8b84e2197f94c8083634640ab37105effe1bc853ca4d5fbece3219b0e8",
+				"digest": "1ffc019dae94eca6b09a49ca67d37398951346de3c3d0cfe23d8d4ca33da83fb",
 				"dockerfile": "docker/postgres/Dockerfile",
 				"service": "pg"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9",
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9",
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-trixie",
-				"digest": "5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689",
+				"tag": "3.14-slim-trixie",
+				"digest": "4ed33101ee7ec299041cc41dd268dae17031184be94384b1ce7936dc4e5dead3",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "python"
 			},
 			{
 				"name": "redis",
 				"tag": "8",
-				"digest": "5fa2edb1e408fa8235e6db8fab01d1afaaae96c9403ba67b70feceb8661e8621",
+				"digest": "4521b581dbddea6e7d81f8fe95ede93f5648aaa66a9dacd581611bf6fe7527bd",
 				"service": "redis"
 			},
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "fdb6c9ceb1293dcb0b7eda5df195b15303b01857d7b10f98489e7691d20aa2a1",
+				"digest": "66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252",
 				"dockerfile": "docker/reloader/Dockerfile",
 				"service": "reloader"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9",
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9",
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-trixie",
-				"digest": "5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689",
+				"tag": "3.14-slim-trixie",
+				"digest": "4ed33101ee7ec299041cc41dd268dae17031184be94384b1ce7936dc4e5dead3",
 				"dockerfile": "docker/python/Dockerfile",
 				"service": "worker"
 			}
@@ -76,38 +76,38 @@
 			{
 				"name": "postgres",
 				"tag": "18",
-				"digest": "073e7c8b84e2197f94c8083634640ab37105effe1bc853ca4d5fbece3219b0e8"
+				"digest": "1ffc019dae94eca6b09a49ca67d37398951346de3c3d0cfe23d8d4ca33da83fb"
 			}
 		],
 		"docker/python/Dockerfile": [
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9"
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9"
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e"
 			},
 			{
 				"name": "python",
-				"tag": "3.13-slim-trixie",
-				"digest": "5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689"
+				"tag": "3.14-slim-trixie",
+				"digest": "4ed33101ee7ec299041cc41dd268dae17031184be94384b1ce7936dc4e5dead3"
 			}
 		],
 		"docker/reloader/Dockerfile": [
 			{
 				"name": "ubuntu",
 				"tag": "latest",
-				"digest": "fdb6c9ceb1293dcb0b7eda5df195b15303b01857d7b10f98489e7691d20aa2a1"
+				"digest": "66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252"
 			}
 		],
 		"docker/requirements/Dockerfile": [
 			{
 				"name": "python",
-				"tag": "3.13-trixie",
-				"digest": "83f08588d12b40f48044fc65d95fc15340f1508e037083f8757dad041c66ffd9"
+				"tag": "3.14-trixie",
+				"digest": "6098c3241d19532bdb439d8c211e3e1c6cfa93c512fbd9118fa0b3d02a418a3e"
 			}
 		]
 	}
